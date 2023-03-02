@@ -1,0 +1,148 @@
+ getchar()函数返回值是int类型的
+ 
+ while循环在使用的时候，由于条件的初始化和判断和改变（调整）分开了，不容易控制循环体，所以出现了for循环
+ 
+ 
+/*
+以下程序在省略前面的i和j的初始话的话
+程序原本可以打印100个 ‘呵呵’
+现在只能打印10 个了
+原因：因为在当内循环执行完的时候，内部的j一直是10没变过值
+所以后面9次内循环都没有执行
+*/
+ int i =0;
+ int j =0;
+ 
+ for(;i < 10; i++ ){
+ 
+    for(; j < 10; j++){
+	     printf("呵呵\n");
+	}
+  
+ }
+ 
+ 
+ 
+ /*以下这个程序的for循环不会执行*/
+ int i =0;
+ int k = 0;
+ for(i = 0; k =0 k =0;i++,K++ ){
+    k++;
+ }
+ 
+ 
+ 
+int main() {
+
+	int i = 0;//初始化
+	while (i <= 10)//判断
+	{
+		printf("%d ", i++);//调整
+	}
+	return 0;
+}
+
+计算1！ + 2！ +3！ +4！ +5！....
+
+int main() {
+	
+	
+	/*这个小代码是用来计算输入的一个数的阶乘
+	int n = 0;
+	int i = 0;
+	scanf("%d", &n);
+	int ret = 1;
+	for (i = 1; i <= n; i++) {
+		ret = ret * i;
+	}
+	printf("%d", ret);
+	return 0;*/
+
+
+	//这个程序是用来计算1！+ 2！ + 3！ + ...一直加到自身的阶乘总和
+	int i = 0;
+	int j = 0;
+	int sum = 0;
+	int input = 0;
+	
+	printf("请输入一个数字，结果会输出1到这个数的阶乘的总和\n");
+	scanf("%d", &input);
+	
+	for (i = 1; i <= input; i++) {
+		int ret = 1;//这里必须将ret放在内循环开始，不然ret的值会在内循环结束之和值不变，一直变大，则求的不是i的阶乘了
+		for (j = 1; j <= i; j++) {
+			ret = ret * j;
+		}
+		sum = sum + ret;
+	}
+
+	printf("这个数从1的阶乘加到自身的阶乘总和为：%d\n",sum);
+	
+	return 0;
+}
+
+
+计算1！ + 2！ +3！ +4！ +5！....
+int main() {
+
+	    int i = 0;
+		int sum = 0;
+		int input = 0;
+		int ret = 1;
+
+	printf("请输入一个数字，结果会输出1到这个数的阶乘的总和\n");
+		scanf("%d", &input);
+		
+		for (i = 1; i <= input; i++) {
+
+			ret = ret * i;
+			sum = sum + ret;//以下5行代码的改进版
+
+			int ret = 1;//这里必须将ret放在内循环开始，不然ret的值会在内循环结束之和值不变，一直变大，则求的不是i的阶乘了
+			for (j = 1; j <= i; j++) {
+				ret = ret * j;
+			}
+			sum = sum + ret;
+		}
+	
+		printf("这个数从1的阶乘加到自身的阶乘总和为：%d\n",sum);
+		
+		return 0;
+	
+
+	return 0;
+}
+
+/*
+编写代码，演示多个字符从两边向中间汇聚
+*/
+
+#include <string.h>
+#include <windows.h>
+
+int main() {
+	
+	char arr1[] = "Hello Beautiful World!!!!! ";
+	char arr2[] = "##########################";
+
+	/*int length1 = strlen(arr1) - 1;
+	int length2 = strlen(arr2) - 1;
+	printf("%d %d ", length1, length2);*/
+
+	int left = 0;
+	int right = (int)(strlen(arr2) - 1);
+
+	while (left <= right ) {
+
+		arr2[left] = arr1[left];
+		arr2[right] = arr1[right];
+		left++;
+		right--;
+		Sleep(1000);
+		system("cls");
+		printf("%s\n", arr2);
+	}
+
+	return 0;
+}
+ 
