@@ -1,0 +1,81 @@
+1.题目
+描述：
+实现字母的大小写转换，多组输入输出
+
+输入描述：
+多组输入，每一行输入大写字母
+
+输出描述：
+针对每组输入输出对应的小写字母。
+
+
+示例：
+输入  A
+      B
+	  
+输出  a
+      b
+	  
+#include <stdio.h>
+
+int main() {
+
+	int input = 0 ;
+	while ((input = getchar()) != EOF) {
+
+		if (input >= 'A' && input <= 'Z') {
+			input+32;
+		}
+		printf("%c\n", input);
+		getchar();
+	}
+
+	return 0;
+}
+
+
+
+2.getchar函数练习例子
+
+//#include <stdio.h>
+//
+//int main() {
+//
+//	int input = 0 ;
+//	while ((input = getchar()) != EOF) {
+//
+//		if (input >= 'A' && input <= 'Z') {
+//			input+32;
+//		}
+//		printf("%c\n", input);
+//		getchar();
+//	}
+//
+//	return 0;
+//}
+
+
+//#include <stdio.h>
+//
+//int main()
+//{
+//    int c;
+//    puts("Enter text. Include a dot ('.') in a sentence to exit:");
+//    do {
+//        c = getchar();
+//        putchar(c);
+//    } while (c != '.');
+//    return 0;
+//}
+
+//#include <stdio.h>
+//
+//int main() {
+//
+//	int ret = 0;
+//	ret = getchar();
+//	putchar(ret);
+//
+//
+//	return 0;
+//}
