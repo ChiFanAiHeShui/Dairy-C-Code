@@ -1,0 +1,77 @@
+1.
+
+struct Stu{//定义一个学生结构体
+   char name[20];
+   int age;
+   float weight;
+}
+
+#include <stdio.h>
+#include <string.h>
+
+int main(){
+   
+   
+   struct Stu stu1 = {"XiaoMing",20,60.3};//创建一个学生
+   
+   //当你想修改stu1中名字时，不能直接像以下这样写
+   //stu1.name = "XiaiHong";//错误写法
+   //因为这个结构体中名字是一个字符串了，如果像以上这么修改的话
+   //那就相当于是：将"XiaiHong"这个字符串赋值给学生结构体中name数组的首元素地址了
+   
+   //这个也是错误的
+   //*(stu1.name) = "XiaoHong";//错误修改值
+   //因为这个数组是char类型的，你对它进行解引用时
+   //解引用的是一个字符的地址。
+   //字符的地址是无法放下一个字符串的。
+   
+   //正确修改：
+   strcpy(stu1.name,"XiaoHong");
+  
+
+   return 0;
+}
+
+
+
+
+2.
+
+大小小于int类型的数在进行运算时会发生整形提升。（以符号位补齐）
+
+例子：
+char有三种类型，一种是char，一种是signed char，一种是 unsigned char
+
+其他的short，int等，默认是signed short 和 signed int。
+
+例子：
+#include <stdio.h>
+
+int main() {
+
+	char a = 3;
+	char b = 127;
+
+	char c = a + b;
+    
+	printf("%d", c);//输出结果为-126
+	/*原因如下：
+	
+	因为在a和b相加之后，得到的数它的符号位为1，
+	则会进行整形提升，将它前面的数位全部都补成1
+	但因为在内存中存储的都是补码，所以在转成原码输出后为-126
+	*/
+	return 0;
+}
+
+
+发生整形提升的例子：
+char c = 'a';
+sizeof(c);//输出1
+sizeof(+c);//输出4
+sizeof(-c);//输出4 
+
+
+3.
+
+如果在大于int类型的数进行运算时会发生算术提升（小的转换成大的），然后双方再进行运算。
