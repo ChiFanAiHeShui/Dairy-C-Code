@@ -1,0 +1,77 @@
+1.枚举的关键字: enum
+  结构体关键字：struct
+  联合体（共用体）关键字：union
+  
+2.动态内存管理：
+
+malloc
+free
+realloc
+calloc
+
+
+3.使用malloc来创建一个40个字节的空间
+
+int * ptr = (int*)malloc(40);
+if(ptr == NULL){
+    perror("malloc");//打印错误信息的函数
+	return 1;
+}
+
+int i = 0;
+for(i = 0; i<10;i++){
+     *(ptr + i)= i;
+}
+
+free(ptr);//释放空间
+ptr = NULL;//因为free是将以ptr作为首元素地址动态开辟的的空间还给内存
+           //但ptr仍然指向一个地址，假如不将它NUll，下次有人调用ptr，则就是非法访问了。
+		   //那么这个ptr就是一个野指针了。
+
+4.free函数只用来释放动态开辟的内存
+        如果不是动态开辟的，那么free函数的行为是未定义的
+        如果参数是NULL，则free函数啥都不干。
+		
+		
+5.calloc函数（申请一个数组）
+申请十个整形的空间
+int * p = (int*)calloc(10,sizeof(int));callo申请的空间会被初始化为0
+
+
+
+6.
+
+realloc函数（调整动态内存的函数）
+
+int main(){
+
+  int *p = (int*)malloc(40);
+  
+  if(p == NULL){
+     perror("malloc");
+	 return 1;
+  }
+  
+  //使用
+  int i = 0;
+  for(i= 0; i< 10; i++){
+     *(p+i)  = i;
+  }
+  
+  //空间不够用，希望能放20个元素，考虑扩容
+  int* ptr = (int*)realloc(p,80);
+  if(ptr != NULL){
+     p = ptr;//到这里才将扩容后的地址赋值给p
+	         //是因为扩容失败也是有可能的
+			 
+   
+    //扩容成功，开始使用
+	
+	
+	//销毁
+	free(p);
+	p = NULL;
+  }
+  
+  return 0;
+}
