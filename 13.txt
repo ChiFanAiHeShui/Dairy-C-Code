@@ -1,0 +1,80 @@
+1.结构中最后一个元素允许是未知大小的数组，这个数组就叫做柔性数组成员。
+
+
+
+2.打开文件和关闭文件
+
+int main(){
+
+       //打开文件
+       //fopen函数有两个参数，test.txt写的是文件地址，后面的r字串是表示文件的使用方式。
+       File* pf = fopen("test.txt","r");
+        if(pf == NULL){
+          perror("fopen");
+          return 1;
+        }
+ 
+ 
+//读文件
+
+//...
+
+
+//关闭文件
+fclose(pf);
+pf = NULL;
+
+
+  return 0;
+}
+
+
+
+3.
+
+
+（1）文件输出
+
+File* pf = fopen("test.txt","w");
+
+if(pf == NULL){
+
+   perror("fopen");
+   return 1;
+}
+
+//写文件 - 输出操作-fputc字符输出函数
+
+char ah = 'a';
+
+for(ch = 'a'; ch <='z';ch++){
+      
+	  fputc(ch,pf);//将ch这个字符写入到pf中去
+	  
+}
+
+//关闭文件
+fclose(pf);
+pf = NULL;
+
+
+（2）文件输入
+
+File* pf = fopen("test.txt","r");
+
+if(pf == NULL){
+
+   perror("fopen");
+   return 1;
+}
+
+//读文件 -输入操作-fgetc,返回值是int类型(字符输入函数)
+int ch = 0;
+
+while((ch = fgetc(pf)) != EOF){
+    printf("%c",pf);
+}
+
+//关闭文件
+fclose(pf);
+pf = NULL;
