@@ -1,0 +1,69 @@
+1.文件的随机读写
+
+*****SEEk_CUR -文件当前位置
+*****SEEK_END -文件末尾位置
+*****SEEK_SET -文件开始位置
+
+***********（文件的随机读）
+int main(){
+  
+  //打开文件
+  FILE* pf = fopen("test.txt","r");
+  //假设test.txt文件里面存储了abcdef这几个字符
+  
+  if(pf == NULL){
+     perror("fopen");
+	 return  1;
+  }
+  
+  //读文件
+  int ch = fgetc(pf);//a
+  printf("%c\n",ch);
+  
+  ch = fgetc(pf);
+  printf("%c\n",ch);//b
+  
+  fseek(pf,5,SEEK_SET);//从文件起始位置往后5个字符
+                       //当是SEEK_END的时候，需要写负数表示向前取第几位，-1表示取末尾字符
+  
+  ch = fgetc(pf);
+  printf("%c\n",ch); 
+  
+  //关闭文件
+  fclose(pf);
+  pf = NULL;
+  
+  return 0;
+  
+}
+
+
+***********（文件的随机写）
+int main(){
+  
+  //打开文件
+  FILE* pf = fopen("test.txt","w");
+  //假设test.txt文件里面啥都没
+  
+  if(pf == NULL){
+     perror("fopen");
+	 return  1;
+  }
+   
+  //写文件
+  fputc('a',pf);
+  fputc('b',pf);
+  fputc('c',pf);
+  fputc('d',pf);
+  
+  fseek(pf,-3,SEEK_CUR);
+  fputc('w',pf);
+  //到这时，test.txt文件中的内容会变成awcd
+  
+  //关闭文件
+  fclose(pf);
+  pf = NULL;
+  
+  return 0;
+  
+}
