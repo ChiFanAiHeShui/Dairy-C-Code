@@ -1,0 +1,280 @@
+请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：
+
+实现 MyQueue 类：
+
+void push(int x) 将元素 x 推到队列的末尾
+int pop() 从队列的开头移除并返回元素
+int peek() 返回队列开头的元素
+boolean empty() 如果队列为空，返回 true ；否则，返回 false
+说明：
+
+你 只能 使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。
+你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。
+ 
+
+示例 1：
+
+输入：
+["MyQueue", "push", "push", "peek", "pop", "empty"]
+[[], [1], [2], [], [], []]
+输出：
+[null, null, null, 1, 1, false]
+
+解释：
+MyQueue myQueue = new MyQueue();
+myQueue.push(1); // queue is: [1]
+myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
+myQueue.peek(); // return 1
+myQueue.pop(); // return 1, queue is [2]
+myQueue.empty(); // return false
+ 
+
+提示：
+
+1 <= x <= 9
+最多调用 100 次 push、pop、peek 和 empty
+假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）
+
+
+//从栈的创建，到用栈来模拟实现队列的实现。
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdbool.h>
+
+
+typedef int STDataType;
+
+typedef struct Stack {//栈的创建
+
+	STDataType* a;//栈的数据类型
+	int top;//栈顶指针
+	int  capacity;//栈的容量
+
+}ST;
+
+void StackInit(ST* ps);//初始化栈
+
+void StackDestory(ST* ps);//销毁栈
+
+void StackPush(ST* ps,STDataType x);//只能尾插
+
+void StackPop(ST* ps);//只能尾删
+
+STDataType StackTop(ST* ps);//查找栈顶的元素
+
+bool StackEmpty(ST* ps);//查询栈是否为空
+
+int StackSize(ST* ps);//查询栈的大小
+
+void StackPrint(ST* ps);//打印栈中信息（一般不推荐使用，因为已使用之后就会将栈中的数据销毁）
+
+void StackInit(ST* ps) {
+	
+	assert(ps);
+	ps->a = NULL;
+	ps->top = 0;//top如果是从0开始，那么每次top指向的是插入节点的后一个位置处
+	ps->capacity = 0;
+
+}
+
+void StackDestory(ST* ps) {
+	
+	assert(ps);
+	free(ps->a);//初始化ps->a数组里面存储的数组
+	ps->a = NULL;
+	ps->top = 0;
+	ps->capacity = 0;
+
+}
+
+void StackPush(ST* ps, STDataType x) {
+
+	assert(ps);
+
+	if (ps->capacity == ps->top) {
+
+	   int  newcapacity = (ps->capacity == 0) ? 4 : ps->capacity * 2;
+		STDataType* tmp = (STDataType*)realloc(ps->a, newcapacity * sizeof(STDataType));
+		if (tmp == NULL) {
+			printf("realloc fail");
+			exit(-1);
+		}
+		else {
+			ps->a = tmp;
+			ps->capacity = newcapacity;
+		}
+
+	}
+	
+		ps->a[ps->top] = x;
+		ps->top++;
+	
+
+}
+
+void StackPop(ST* ps) {
+	
+	assert(ps);
+	assert(!StackEmpty(ps));
+
+	ps->top--;
+
+}
+
+STDataType StackTop(ST* ps) {
+	
+	assert(ps);
+	assert(!StackEmpty(ps));
+
+	
+    return ps->a[ps->top-1];
+
+}
+
+bool StackEmpty(ST* ps) {
+
+	assert(ps);
+	return ps->top == 0;
+}
+
+int StackSize(ST* ps) {
+	assert(ps);
+	return ps->top;//因为是模拟数组来实现栈，所以top指针指向的数组下标就是数组的当前容量
+}
+
+void StackPrint(ST* ps){
+	
+	assert(ps);
+
+	while (ps->top != 0) {
+		ps->top--;
+		printf("%d ", ps->a[ps->top]);
+
+	}
+
+}
+
+
+
+typedef struct {//两个栈模拟实现栈
+
+/*
+    因为要用栈来模拟实现队列。根据栈的特性先入后出，
+		可以将一个栈只用来入数据，用另一个栈只用来出数据。
+*/
+
+    ST enter;//只插入数据的栈
+    ST out;//只弹出数据的栈
+
+	
+
+} MyQueue;
+
+
+MyQueue* myQueueCreate() {//用栈模拟创建一个队列
+
+    MyQueue* obj = (MyQueue*)malloc(sizeof(MyQueue));
+
+    //别忘了给两个栈初始化一下啊
+
+		StackInit(&obj->enter);
+		StackInit(&obj->out);
+    return obj;
+
+}
+
+void myQueuePush(MyQueue* obj, int x) {
+      
+			//直接在只插入的栈中插入数据即可
+			StackPush(&obj->enter,x);
+
+}
+
+int myQueuePop(MyQueue* obj) {
+
+		/*
+
+		在队列需要删除一个数据的时候，分两种情况：第一种：只弹出的栈不为空，那么直接尾删。
+		                                      第二种：只弹出的栈为空，那么就需要把只插入栈的数据一个一个 尾删到为空，并同时将这些数据尾插到只弹出栈中。然后再尾删一下只弹出的栈就模拟完成了队列的删除操作。
+
+		
+		*/
+	
+	assert(obj);
+	if(!StackEmpty(&obj->out)){//只弹出的栈不为空的情况，那么直接尾删。
+          int tmp = StackTop(&obj->out);
+					StackPop(&obj->out);
+					return tmp;
+
+	}else{//只弹出的栈为空的情况
+		
+
+		//只插入栈的数据一个一个 尾删到为空，并同时将这些数据尾插到只弹出栈中
+		while(!StackEmpty(&obj->enter)){
+			STDataType tmp = StackTop(&obj->enter);
+			StackPush(&obj->out,tmp);
+			StackPop(&obj->enter);		
+		}
+
+    //再尾删一下只弹出的栈就模拟完成了队列的删除操作
+    int tmp = StackTop(&obj->out);
+		StackPop(&obj->out);
+		return tmp;
+
+	}
+}
+
+
+int myQueuePeek(MyQueue* obj) {
+
+	//和上面模拟队列的删除很相似，只不过相比之下不用删除了，只需要返回开头数据就行
+
+   assert(obj);
+	if(!StackEmpty(&obj->out)){
+          int tmp = StackTop(&obj->out);
+					return tmp;
+
+	}else{
+		
+		while(!StackEmpty(&obj->enter)){
+			STDataType tmp = StackTop(&obj->enter);
+			StackPush(&obj->out,tmp);
+			StackPop(&obj->enter);		
+		}
+
+    int tmp = StackTop(&obj->out);
+		return tmp;
+
+	}
+}
+
+bool myQueueEmpty(MyQueue* obj) {
+           //当两个栈都为空时候才返回true，否则返回false
+				 return StackEmpty(&obj->enter) && StackEmpty(&obj->out);
+}
+
+void myQueueFree(MyQueue* obj) {
+        StackDestory(&obj->enter);//这里删除的是一个栈，所以不能直接free，而要使用栈销毁来实现
+				StackDestory(&obj->out);//这里删除的是一个栈，所以不能直接free，而要使用栈销毁来实现
+				free(obj);//obj是一个用栈模拟实现的队列的指针，所以在删除完上面两个之后，可以直接free
+			
+}
+
+/**
+ * Your MyQueue struct will be instantiated and called as such:
+ * MyQueue* obj = myQueueCreate();
+ * myQueuePush(obj, x);
+ 
+ * int param_2 = myQueuePop(obj);
+ 
+ * int param_3 = myQueuePeek(obj);
+ 
+ * bool param_4 = myQueueEmpty(obj);
+ 
+ * myQueueFree(obj);
+*/
+
+
+
