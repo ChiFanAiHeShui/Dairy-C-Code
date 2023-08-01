@@ -1,0 +1,9 @@
+﻿  Queue.c
+  Test.c
+D:\Git-WareHouse\Dairy-C-Code\BinaryTree\BinaryTree\Test.c(56,22): warning C4047: “函数”:“QDataType”与“int”的间接级别不同
+D:\Git-WareHouse\Dairy-C-Code\BinaryTree\BinaryTree\Test.c(56,18): warning C4024: “QueuePush”: 形参和实参 2 的类型不同
+  正在生成代码
+  Previous IPDB not found, fall back to full compilation.
+  All 13 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  BinaryTree.vcxproj -> D:\Git-WareHouse\Dairy-C-Code\BinaryTree\x64\Release\BinaryTree.exe
