@@ -1,0 +1,77 @@
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <time.h>
+
+
+int main() {
+
+	TestQuick();
+	return 0;
+}
+
+
+
+
+void TestQuick() {
+
+	int a[] = {6,1,2,7,9,3,4,5,10,8};
+	int len = sizeof(a) / sizeof(a[0]);
+
+	QuickSort(a, 0,len - 1);
+	PrintfArray(a, len);
+
+}
+
+
+void Swap(int* child, int* parent) {//交换数组中下标为child和parent的值
+
+	int  tmp;
+	tmp = *child;
+	*child = *parent;
+	*parent = tmp;
+
+}
+
+
+void QuickSort(int* a, int begin, int end) {
+
+	//当递归到空或则只有一个数据的时候
+	if (begin >= end) {
+		return;
+	}
+
+	int left = begin, right = end;
+	int key = left;
+
+	//当left与right相遇时或刚要错过时跳出循环
+	while (left < right) {
+
+		//right向左走，找小。
+		//并且同时为了防止极端情况，一直找不到小，如果没加left<right,会产生越界。
+		while (left < right && a[right] >= a[key]) {
+			right--;
+		}
+
+		//left向左走，找大。
+		//并且同时为了防止极端情况，一直找不到大，如果没加left<right,会产生越界。
+		while (left < right && a[left] <= a[key]) {
+			left++;
+		}
+
+		//到这里就说明right找到了小，left找到了大。
+		//所以需要交换下left和right的值。
+		Swap(&a[left], &a[right]);
+	}
+
+	//到这里就说明left与right相遇
+	//将KEY的值和下标与相遇的值和下标交换
+	Swap(&a[left], &a[key]);
+	key = left;
+
+	QuickSort(a, begin, key - 1);//左子序列递归实现左小右大
+	QuickSort(a, key + 1, end);//右子序列递归实现左小右大
+
+}
