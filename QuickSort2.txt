@@ -1,0 +1,65 @@
+//快速排序---挖坑法
+ int PartSort2(int* a, int begin, int end) {
+
+	int key = a[begin];//先将最左边的值拿出来做key值
+	int	pit = begin;//定义一个坑
+	
+	while (begin < end) {
+
+
+		
+
+		//右边找小，将其小值放到左边的坑里面去，这个位置形成新的坑
+		while (begin < end && a[end] >= key) {
+			end--;
+		}
+		
+		a[pit] = a[end];
+		pit = end;
+
+
+		//左边找大，将其大值放到右边的坑里面取，这个位置形成新的坑
+		while (begin < end && a[begin] <= key) {
+			begin++;
+		}
+
+		a[pit] = a[begin];
+		pit = begin;
+
+	}
+
+	//到这说明begin和end相遇了，这时，把key的值填入到这个坑里。
+	//从而完成了一次排序，形成了左小右大了
+	a[pit] = key;
+
+	//最后，返回中间值即可，便于其接下来进行递归调用
+	return	pit;
+}
+
+
+ //快速排序----前后指针法
+ int PartSort3(int* a, int begin, int end) {
+	 
+	 int key = begin;
+
+	 int prev = begin, cur = begin + 1;
+	  
+	 while (cur <= end) {//条件必须为小于或等于
+
+		 //当cur指针指向的值小于key指向的值时
+		 if (a[cur] < a[key] ) {
+			 prev++;
+			 Swap(&a[cur], &a[prev]);
+		 }
+		 cur++;//cur其实不管发生什么情况都是一直++的
+	 }
+
+	 //到这里，说明cur已经++到末尾去了
+	 //这时，将prev指向的位置处的值与key指向的值交换
+	 //从而实现了整体左小右大了
+	 Swap(&a[prev], &a[key]);
+	 key = prev;
+
+	 return key;
+
+}
