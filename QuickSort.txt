@@ -1,77 +1,65 @@
+//快速排序---挖坑法
+ int PartSort2(int* a, int begin, int end) {
+
+	int key = a[begin];//先将最左边的值拿出来做key值
+	int	pit = begin;//定义一个坑
+	
+	while (begin < end) {
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <time.h>
+		
+
+		//右边找小，将其小值放到左边的坑里面去，这个位置形成新的坑
+		while (begin < end && a[end] >= key) {
+			end--;
+		}
+		
+		a[pit] = a[end];
+		pit = end;
 
 
-int main() {
-
-	TestQuick();
-	return 0;
-}
-
-
-
-
-void TestQuick() {
-
-	int a[] = {6,1,2,7,9,3,4,5,10,8};
-	int len = sizeof(a) / sizeof(a[0]);
-
-	QuickSort(a, 0,len - 1);
-	PrintfArray(a, len);
-
-}
-
-
-void Swap(int* child, int* parent) {//交换数组中下标为child和parent的值
-
-	int  tmp;
-	tmp = *child;
-	*child = *parent;
-	*parent = tmp;
-
-}
-
-
-void QuickSort(int* a, int begin, int end) {
-
-	//当递归到空或则只有一个数据的时候
-	if (begin >= end) {
-		return;
-	}
-
-	int left = begin, right = end;
-	int key = left;
-
-	//当left与right相遇时或刚要错过时跳出循环
-	while (left < right) {
-
-		//right向左走，找小。
-		//并且同时为了防止极端情况，一直找不到小，如果没加left<right,会产生越界。
-		while (left < right && a[right] >= a[key]) {
-			right--;
+		//左边找大，将其大值放到右边的坑里面取，这个位置形成新的坑
+		while (begin < end && a[begin] <= key) {
+			begin++;
 		}
 
-		//left向左走，找大。
-		//并且同时为了防止极端情况，一直找不到大，如果没加left<right,会产生越界。
-		while (left < right && a[left] <= a[key]) {
-			left++;
-		}
+		a[pit] = a[begin];
+		pit = begin;
 
-		//到这里就说明right找到了小，left找到了大。
-		//所以需要交换下left和right的值。
-		Swap(&a[left], &a[right]);
 	}
 
-	//到这里就说明left与right相遇
-	//将KEY的值和下标与相遇的值和下标交换
-	Swap(&a[left], &a[key]);
-	key = left;
+	//到这说明begin和end相遇了，这时，把key的值填入到这个坑里。
+	//从而完成了一次排序，形成了左小右大了
+	a[pit] = key;
 
-	QuickSort(a, begin, key - 1);//左子序列递归实现左小右大
-	QuickSort(a, key + 1, end);//右子序列递归实现左小右大
+	//最后，返回中间值即可，便于其接下来进行递归调用
+	return	pit;
+}
+
+
+ //快速排序----前后指针法
+ int PartSort3(int* a, int begin, int end) {
+	 
+	 int key = begin;
+
+	 int prev = begin, cur = begin + 1;
+	  
+	 while (cur <= end) {//条件必须为小于或等于
+
+		 //当cur指针指向的值小于key指向的值时
+		 if (a[cur] < a[key] ) {
+			 prev++;
+			 Swap(&a[cur], &a[prev]);
+		 }
+		 cur++;//cur其实不管发生什么情况都是一直++的
+	 }
+
+	 //到这里，说明cur已经++到末尾去了
+	 //这时，将prev指向的位置处的值与key指向的值交换
+	 //从而实现了整体左小右大了
+	 Swap(&a[prev], &a[key]);
+	 key = prev;
+
+	 return key;
 
 }
